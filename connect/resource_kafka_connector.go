@@ -6,7 +6,6 @@ import (
 	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	kc "github.com/ricardo-ch/go-kafka-connect/lib/connectors"
 )
 
 func kafkaConnectorResource() *schema.Resource {
@@ -52,7 +51,7 @@ func setNameFromID(d *schema.ResourceData, meta interface{}) ([]*schema.Resource
 }
 
 func connectorCreate(d *schema.ResourceData, meta interface{}) error {
-	c := meta.(kc.HighLevelClient)
+	c := meta.(OAuthClient)
 	name := nameFromRD(d)
 
 	config, sensitiveCache := configFromRD(d)
@@ -62,8 +61,8 @@ func connectorCreate(d *schema.ResourceData, meta interface{}) error {
 		return errors.New("config.name is the mandatory field indentical to the resource name")
 	}
 
-	req := kc.CreateConnectorRequest{
-		ConnectorRequest: kc.ConnectorRequest{
+	req := CreateConnectorRequest{
+		ConnectorRequest: ConnectorRequest{
 			Name: name,
 		},
 		Config: config,
@@ -88,10 +87,10 @@ func connectorCreate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func connectorDelete(d *schema.ResourceData, meta interface{}) error {
-	c := meta.(kc.HighLevelClient)
+	c := meta.(OAuthClient)
 
 	name := nameFromRD(d)
-	req := kc.ConnectorRequest{
+	req := ConnectorRequest{
 		Name: name,
 	}
 
@@ -106,7 +105,7 @@ func connectorDelete(d *schema.ResourceData, meta interface{}) error {
 }
 
 func connectorUpdate(d *schema.ResourceData, meta interface{}) error {
-	c := meta.(kc.HighLevelClient)
+	c := meta.(OAuthClient)
 
 	name := nameFromRD(d)
 
@@ -118,8 +117,8 @@ func connectorUpdate(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	log.Printf("[INFO] Requesting update to connector %v", name)
-	req := kc.CreateConnectorRequest{
-		ConnectorRequest: kc.ConnectorRequest{
+	req := CreateConnectorRequest{
+		ConnectorRequest: ConnectorRequest{
 			Name: name,
 		},
 		Config: config,
@@ -145,11 +144,11 @@ func connectorUpdate(d *schema.ResourceData, meta interface{}) error {
 }
 
 func connectorRead(d *schema.ResourceData, meta interface{}) error {
-	c := meta.(kc.HighLevelClient)
+	c := meta.(OAuthClient)
 
 	config, sensitiveCache := configFromRD(d)
 	name := d.Get("name").(string)
-	req := kc.ConnectorRequest{
+	req := ConnectorRequest{
 		Name: name,
 	}
 

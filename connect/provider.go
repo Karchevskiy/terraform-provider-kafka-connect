@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	kc "github.com/ricardo-ch/go-kafka-connect/lib/connectors"
 )
 
 func Provider() *schema.Provider {
@@ -16,15 +15,10 @@ func Provider() *schema.Provider {
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("KAFKA_CONNECT_URL", ""),
 			},
-			"basic_auth_username": {
+			"token": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("KAFKA_CONNECT_BASIC_AUTH_USERNAME", ""),
-			},
-			"basic_auth_password": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("KAFKA_CONNECT_BASIC_AUTH_PASSWORD", ""),
+				DefaultFunc: schema.EnvDefaultFunc("KAFKA_CONNECT_TOKEN", ""),
 			},
 		},
 		ConfigureFunc: providerConfigure,
@@ -39,11 +33,10 @@ func Provider() *schema.Provider {
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	log.Printf("[INFO] Initializing KafkaConnect client")
 	addr := d.Get("url").(string)
-	c := kc.NewClient(addr)
-	user := d.Get("basic_auth_username").(string)
-	pass := d.Get("basic_auth_password").(string)
-	if user != "" && pass != "" {
-		c.SetBasicAuth(user, pass)
+	c := NewOauthClient(addr)
+	token := d.Get("token").(string)
+	if token != "" {
+		c.SetOAuthToken(token)
 	}
 	return c, nil
 }

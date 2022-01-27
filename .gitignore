@@ -1,2 +1,9 @@
 !/examples/main.tf
 /examples/*
+
+
+### IntelliJ ###
+.idea
+*.iws
+*.iml
+*.ipr

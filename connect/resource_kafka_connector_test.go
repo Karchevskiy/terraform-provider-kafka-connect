@@ -6,7 +6,6 @@ import (
 
 	r "github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
-	kc "github.com/ricardo-ch/go-kafka-connect/lib/connectors"
 )
 
 func TestAccConnectorConfigUpdate(t *testing.T) {
@@ -49,9 +48,9 @@ func testResourceConnector_initialCheck(s *terraform.State) error {
 		return fmt.Errorf("id doesn't match name")
 	}
 
-	client := testProvider.Meta().(kc.HighLevelClient)
+	client := testProvider.Meta().(OAuthClient)
 
-	c, err := client.GetConnector(kc.ConnectorRequest{Name: "sqlite-sink"})
+	c, err := client.GetConnector(ConnectorRequest{Name: "sqlite-sink"})
 	if err != nil {
 		return err
 	}
@@ -66,9 +65,9 @@ func testResourceConnector_initialCheck(s *terraform.State) error {
 }
 
 func testResourceConnector_updateCheck(s *terraform.State) error {
-	client := testProvider.Meta().(kc.HighLevelClient)
+	client := testProvider.Meta().(OAuthClient)
 
-	c, err := client.GetConnector(kc.ConnectorRequest{Name: "sqlite-sink"})
+	c, err := client.GetConnector(ConnectorRequest{Name: "sqlite-sink"})
 	if err != nil {
 		return err
 	}
