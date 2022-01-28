@@ -3,7 +3,6 @@ package connect
 import (
 	"crypto/tls"
 	"fmt"
-	"reflect"
 	"sync"
 	"time"
 
@@ -69,10 +68,6 @@ func (c *oauthClient) SetClientCertificates(certs ...tls.Certificate) {
 
 func (c *oauthClient) SetOAuthToken(token string) {
 	c.client.SetOAuthToken(token)
-
-	v := reflect.ValueOf(c.client)
-	y := v.FieldByName("restClient")
-	fmt.Println(y.Interface())
 }
 
 //GetAll gets the list of all active connectors

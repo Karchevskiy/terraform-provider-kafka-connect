@@ -1,4 +1,4 @@
-module github.com/Mongey/terraform-provider-kafka-connect
+module omni/terraform-provider-kafka-connect
 
 go 1.16
 

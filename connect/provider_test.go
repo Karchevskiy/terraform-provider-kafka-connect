@@ -25,8 +25,14 @@ func TestProvider(t *testing.T) {
 
 func testAccPreCheck(t *testing.T) {
 	connectVar := "KAFKA_CONNECT_URL"
-	value := os.Getenv(connectVar)
-	if value == "" {
+	urlValue := os.Getenv(connectVar)
+	if urlValue == "" {
 		t.Fatalf("%s env var must be set", connectVar)
+	}
+
+	connectToken := "KAFKA_CONNECT_TOKEN"
+	tokenValue := os.Getenv(connectToken)
+	if tokenValue == "" {
+		t.Fatalf("%s env var must be set", connectToken)
 	}
 }

@@ -10,6 +10,6 @@ test:
 	go test ./...
 
 testacc:
-	KAFKA_CONNECT_URL=http://localhost:8083 TF_LOG=debug TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 120m
+	KAFKA_CONNECT_URL=http://localhost:8083 KAFKA_CONNECT_TOKEN=tokentoken TF_LOG=debug TF_ACC=1 go test $(TEST) -v $(TESTARGS) -timeout 120m
 
 .PHONY: build test testacc
